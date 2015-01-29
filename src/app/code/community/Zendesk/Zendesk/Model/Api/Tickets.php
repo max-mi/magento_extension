@@ -170,7 +170,16 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
         {
             $ticket['ticket'] = array('status' => $status);
             $params['ids'] = implode(",",$data);
-            $response = $this->_call('tickets/update_many.json', $params, 'PUT', $ticket);
+            $this->_call('tickets/update_many.json', $params, 'PUT', $ticket);
+        }
+    }
+    
+    public function bulkMarkAsSpam($data)
+    {
+        if ( is_array($data) )
+        {
+            $params['ids'] = implode(",",$data);
+            $this->_call('tickets/mark_many_as_spam.json', $params, 'PUT');
         }
     }
     

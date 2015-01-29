@@ -725,7 +725,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $this->_redirectReferer();
     }
     
-    public function bulkChangestatusAction()
+    public function bulkChangeStatusAction()
     {
         $ids = $this->getRequest()->getParam('id');
         $status = $this->getRequest()->getParam('status');
@@ -735,6 +735,26 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('zendesk')->__(
                             '%d ticket(s) were updated. Attention: closed and new tickets cannot be updated.', count($ids)
+                    )
+            );
+        }
+        catch ( Exception $e )
+        {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        $this->_redirect('adminhtml/zendesk/');
+    }
+    
+    public function bulkMarkSpamAction()
+    {
+        $ids = $this->getRequest()->getParam('id');
+        
+        try
+        {
+            Mage::getModel('zendesk/api_tickets')->bulkMarkAsSpam($ids);
+            Mage::getSingleton('adminhtml/session')->addSuccess(
+                    Mage::helper('zendesk')->__(
+                            '%d ticket(s) were marked as spam.', count($ids)
                     )
             );
         }

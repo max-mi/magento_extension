@@ -45,6 +45,9 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
     }
     
     protected function _construct() {
+        parent::_construct();
+        
+        $this->setMassactionBlockName('zendesk/adminhtml_dashboard_tab_tickets_grid_massaction');
         $this->setId('zendesk_tab_tickets_grid_' . $this->_viewId);
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
@@ -79,6 +82,48 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
         }
         
         return parent::_prepareCollection();
+    }
+    
+    protected function _prepareMassaction() {
+        parent::_prepareMassaction();
+        
+        $this->setMassactionIdField('id');
+        $this->getMassactionBlock()->setFormFieldName('id');
+        
+        $formKey = Mage::getSingleton('core/session')->getFormKey();
+        
+        $this->getMassactionBlock()->addItem('delete', array(
+            'label'         => Mage::helper('zendesk')->__('Delete'),
+            'url'           => $this->getUrl('*/adminhtml_zendesk/bulkDelete', array('form_key' => $formKey, '_current' => true)),
+            'confirm'       => Mage::helper('zendesk')->__('Are you sure you want to delete selected tickets?')
+        ));
+       
+        $this->getMassactionBlock()->addItem('change_status', array(
+            'label'         => Mage::helper('zendesk')->__('Change Status'),
+            'url'           => $this->getUrl('*/adminhtml_zendesk/bulkChangeStatus', array('form_key' => $formKey, '_current' => true)),
+            'confirm'       => Mage::helper('zendesk')->__('Are you sure you want to change status of selected tickets?'),
+            'additional'    => array(
+                'visibility'    => array(
+                    'name'          => 'status',
+                    'type'          => 'select',
+                    'class'         => 'required-entry',
+                    'label'         => Mage::helper('zendesk')->__('Status'),
+                    'values'        => Mage::helper('zendesk')->getStatusMap()
+                )
+            )
+        ));
+        
+        $this->getMassactionBlock()->addItem('mark_as_spam', array(
+            'label'         => Mage::helper('zendesk')->__('Mark as Spam'),
+            'url'           => $this->getUrl('*/adminhtml_zendesk/bulkMarkSpam', array('form_key' => $formKey, '_current' => true)),
+            'confirm'       => Mage::helper('zendesk')->__('Are you sure you want to mark as spam selected tickets?'),
+        ));
+        
+        return $this;
+    }
+    
+    protected function getNoFilterMassactionColumn(){
+        return true;
     }
     
     protected function addColumnBasedOnType($index, $title, $filter = false, $sortable = true) {
