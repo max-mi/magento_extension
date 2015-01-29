@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2015 Zendesk
+ * Copyright 2013 Zendesk.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -344,37 +344,13 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         }
         else
         {
-            $subject = "";
-            
-            $text = explode("Comment:",$row['description']); 
-            $text = explode("------------------", $text[count($text)-1]);
-            $text = $text[0];
-           
-            if( strlen($text) > 30 )
-            {
-                for( $index = 0; $index <= 30; $index++ )
-                {
-                    if( $index === 30)
-                    {
-                        while( $text[$index] !== " " && $index <= strlen($text))
-                        {
-                            $subject .= $text[$index];
-                            $index++;
-                        }
-                        break;
-                    }
-                    $subject .= $text[$index];
-                }
-                $subject .= "...";
-            }
-            else
-            {
-                $subject = $text;
-            }
+            $text       = explode("Comment:",$row['description']); 
+            $text       = explode("------------------", $text[count($text)-1]);
+            $text       = $text[0];
+            $subject    = strlen($text) > 30 ? substr($text, 0, 30) . '...' : $text;
             
             return '<a href="' . $url . '" target="_blank">' . $subject . '</a>'; 
         }
-        
     }
         
     public function getAdminSettings() {
@@ -411,5 +387,28 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             'high'      =>  'High',
             'urgent'    =>  'Urgent'
         );
+    }
+    
+    public function getChosenViews() {
+        $list = trim(trim(Mage::getStoreConfig('zendesk/backend_features/show_views')), ',');
+        return explode(',', $list);
+    }
+    
+    public function getFormatedDataForAPI($dateToFormat) {
+        $myDateTime = DateTime::createFromFormat('d/m/Y', $dateToFormat);
+        return $myDateTime->format('Y-m-d');
+    }
+    
+    public function isValidDate($date) {
+        if( is_string($date) ) {
+            $d = DateTime::createFromFormat('d/m/Y', $date);
+            return $d && $d->format('d/m/Y') == $date;
+        }
+        
+        return false;
+    }
+    
+    public function getFormatedDateTime($dateToFormat) {
+        return Mage::helper('core')->formatDate($dateToFormat, 'medium', true);
     }
 }

@@ -561,7 +561,10 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             {
                 $post['password'] = "";
             }
-            
+            var_dump(Mage::helper('core')->decrypt($settings->getPassword()));
+            var_dump($settings->getPassword());
+            var_dump($post['password']);
+            //die;
             if( !empty($post['password']) )
             {
                 $post['password'] = Mage::helper('core')->encrypt($post['password']);
@@ -571,10 +574,13 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                 unset($post['password']);
             }
             
+ 
+
             $settings->setData($post);
             $settings->save();
             Mage::register('zendesk_settings', $settings);
-            
+            var_dump(Mage::helper('core')->decrypt($settings->getPassword()));
+            //die;
             if( !$settings->getId() )
             {
                 Mage::throwException(Mage::helper('zendesk')->__('Error saving settings.'));
@@ -747,6 +753,47 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
     {
         $this->loadLayout()->_setActiveMenu('zendesk/settings');
         return $this;
+    }
+    
+    public function ticketsAllAction() {
+        $isAjax = Mage::app()->getRequest()->isAjax();
+        
+        if ($isAjax) {
+            $this->storeDependenciesInCachedRegistry();
+            $this->getResponse()->setBody($this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_tickets_grid_all')->toHtml());
+        }
+    }
+    
+    public function ticketsViewAction() {
+        $isAjax = Mage::app()->getRequest()->isAjax();
+
+        if ($isAjax) {
+            $this->storeDependenciesInCachedRegistry();
+            $viewId = (int) $this->getRequest()->getParam('id');
+            Mage::register('zendesk_tickets_view', $viewId);
+            
+            $this->getResponse()->setBody($this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_tickets_grid_view')->toHtml());
+        }
+    }
+    
+    protected function storeDependenciesInCachedRegistry() {
+        $cache = Mage::app()->getCache();
+        
+        if( $cache->load('zendesk_users') === false) {
+            $users = serialize( Mage::getModel('zendesk/api_users')->all() );
+            $cache->save($users, 'zendesk_users', array('zendesk', 'zendesk_users'), 300);
+        }
+        
+        if( $cache->load('zendesk_groups') === false) {
+            $groups = serialize( Mage::getModel('zendesk/api_groups')->all() );
+            $cache->save($groups, 'zendesk_groups', array('zendesk', 'zendesk_groups'), 1200);
+        }
+        
+        $users  = unserialize( $cache->load('zendesk_users') );
+        $groups = unserialize( $cache->load('zendesk_groups') );
+        
+        Mage::register('zendesk_users', $users);
+        Mage::register('zendesk_groups', $groups);
     }
 
 }

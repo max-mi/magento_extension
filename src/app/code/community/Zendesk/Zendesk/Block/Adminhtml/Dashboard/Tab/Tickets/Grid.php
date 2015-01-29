@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Zendesk
+ * Copyright 2013 Zendesk.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid extends Mage_Ad
 
         $filter = $this->getParam($this->getVarNameFilter(), null);
         $data = $this->helper('adminhtml')->prepareFilterString($filter);
+        
         $data['per_page'] = (int) $this->getParam($this->getVarNameLimit(), $this->_defaultLimit);
         $data['page'] = (int) $this->getParam($this->getVarNamePage(), $this->_defaultPage);
         $data['sort_by'] = $this->getParam($this->getVarNameSort(), $this->_defaultSort);
