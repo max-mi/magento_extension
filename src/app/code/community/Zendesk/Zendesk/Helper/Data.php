@@ -411,4 +411,25 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function getFormatedDateTime($dateToFormat) {
         return Mage::helper('core')->formatDate($dateToFormat, 'medium', true);
     }
+    
+    public function getConnectionStatus() {
+        try {
+            Mage::getModel('zendesk/api_users')->me();
+            
+            return array(
+                'success'   => true,
+                'msg'       => Mage::helper('zendesk')->__('Connection to Zendesk API successful'),
+            );
+        } catch (Exception $ex) {
+            $error = Mage::helper('zendesk')->__('Connection to Zendesk API failed') .
+                '<br />' . $ex->getCode() . ': ' . $ex->getMessage() .
+                '<br />' . Mage::helper('zendesk')->__('Troubleshooting tips can be found at <a href=%s>%s</a>', 'https://support.zendesk.com/entries/26579987', 'https://support.zendesk.com/entries/26579987');
+            
+            return array(
+                'success'   => false,
+                'msg'       => $error,
+            );
+        }
+        
+    }
 }
