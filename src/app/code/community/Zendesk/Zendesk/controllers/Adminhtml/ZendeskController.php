@@ -568,8 +568,6 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             {
                 unset($post['password']);
             }
-            
- 
 
             $settings->setData($post);
             $settings->save();
@@ -591,14 +589,12 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     public function checkConnectionAction()
     {
-        $user = Mage::getModel('zendesk/api_users')->all();
+        $connection = Mage::helper('zendesk')->getConnectionStatus();
         
-        if( $user )
-        {
+        if($connection['success']) {
             Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('zendesk')->__('Connection success'));
         }
-        else
-        {
+        else {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Connection has failed.'));
         }
 
