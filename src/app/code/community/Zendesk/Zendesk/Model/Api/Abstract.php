@@ -95,11 +95,6 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
         $body = json_decode($response->getBody(), true);
 
         Mage::log(var_export($body, true), null, 'zendesk.log');
-
-        if( (!$settings || $settings->getUseGlobalSettings() === "0") && $response->isError())
-        {
-            throw new Exception($body['error'], $response->getStatus());
-        }
         
         if($response->isError()) {
             if(is_array($body) && isset($body['error'])) {

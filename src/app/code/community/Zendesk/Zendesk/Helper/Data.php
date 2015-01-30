@@ -274,7 +274,12 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getTicketTotals($type = null, $from = null, $to = null)
     {
-        $tickets = Mage::getModel('zendesk/api_tickets')->all();
+        try {
+            $tickets = Mage::getModel('zendesk/api_tickets')->all();
+        }
+        catch(Exception $ex) {
+            return array();
+        }
         
         if( is_null($tickets) )
         {
