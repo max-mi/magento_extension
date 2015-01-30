@@ -174,6 +174,16 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
         }
     }
     
+    public function bulkUpdatePriority($data, $priority)
+    {
+        if ( is_array($data) )
+        {
+            $ticket['ticket'] = array('priority' => $priority);
+            $params['ids'] = implode(",",$data);
+            $this->_call('tickets/update_many.json', $params, 'PUT', $ticket);
+        }
+    }
+    
     public function bulkMarkAsSpam($data)
     {
         if ( is_array($data) )

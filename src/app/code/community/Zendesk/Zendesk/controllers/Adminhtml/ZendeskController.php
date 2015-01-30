@@ -739,6 +739,27 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $this->_redirect('adminhtml/zendesk/');
     }
     
+    public function bulkChangePriorityAction()
+    {
+        $ids = $this->getRequest()->getParam('id');
+        $priority = $this->getRequest()->getParam('priority');
+        
+        try
+        {
+            Mage::getModel('zendesk/api_tickets')->bulkUpdatePriority($ids, $priority);
+            Mage::getSingleton('adminhtml/session')->addSuccess(
+                    Mage::helper('zendesk')->__(
+                            '%d ticket(s) were updated.', count($ids)
+                    )
+            );
+        }
+        catch ( Exception $e )
+        {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        $this->_redirect('adminhtml/zendesk/');
+    }
+    
     public function bulkMarkSpamAction()
     {
         $ids = $this->getRequest()->getParam('id');

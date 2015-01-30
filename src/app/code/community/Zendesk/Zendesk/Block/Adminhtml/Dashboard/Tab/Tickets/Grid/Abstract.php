@@ -113,6 +113,21 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
             )
         ));
         
+        $this->getMassactionBlock()->addItem('change_priority', array(
+            'label'         => Mage::helper('zendesk')->__('Change Priority'),
+            'url'           => $this->getUrl('*/adminhtml_zendesk/bulkChangePriority', array('form_key' => $formKey, '_current' => true)),
+            'confirm'       => Mage::helper('zendesk')->__('Are you sure you want to change priority of selected tickets?'),
+            'additional'    => array(
+                'visibility'    => array(
+                    'name'          => 'priority',
+                    'type'          => 'select',
+                    'class'         => 'required-entry',
+                    'label'         => Mage::helper('zendesk')->__('Priority'),
+                    'values'        => Mage::helper('zendesk')->getPriorityMap()
+                )
+            )
+        ));
+        
         $this->getMassactionBlock()->addItem('mark_as_spam', array(
             'label'         => Mage::helper('zendesk')->__('Mark as Spam'),
             'url'           => $this->getUrl('*/adminhtml_zendesk/bulkMarkSpam', array('form_key' => $formKey, '_current' => true)),
