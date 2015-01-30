@@ -128,6 +128,21 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
             )
         ));
         
+        $this->getMassactionBlock()->addItem('change_type', array(
+            'label'         => Mage::helper('zendesk')->__('Change Type'),
+            'url'           => $this->getUrl('*/adminhtml_zendesk/bulkChangeType', array('form_key' => $formKey, '_current' => true)),
+            'confirm'       => Mage::helper('zendesk')->__('Are you sure you want to change type of selected tickets?'),
+            'additional'    => array(
+                'visibility'    => array(
+                    'name'          => 'type',
+                    'type'          => 'select',
+                    'class'         => 'required-entry',
+                    'label'         => Mage::helper('zendesk')->__('Type'),
+                    'values'        => Mage::helper('zendesk')->getTypeMap()
+                )
+            )
+        ));
+        
         $this->getMassactionBlock()->addItem('mark_as_spam', array(
             'label'         => Mage::helper('zendesk')->__('Mark as Spam'),
             'url'           => $this->getUrl('*/adminhtml_zendesk/bulkMarkSpam', array('form_key' => $formKey, '_current' => true)),

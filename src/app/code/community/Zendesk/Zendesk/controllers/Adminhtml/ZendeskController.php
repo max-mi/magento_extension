@@ -723,9 +723,10 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
     {
         $ids = $this->getRequest()->getParam('id');
         $status = $this->getRequest()->getParam('status');
+        
         try
         {
-            Mage::getModel('zendesk/api_tickets')->bulkUpdateStatus($ids, $status);
+            Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('status'));
             Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('zendesk')->__(
                             '%d ticket(s) were updated. Attention: closed and new tickets cannot be updated.', count($ids)
@@ -746,7 +747,28 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         
         try
         {
-            Mage::getModel('zendesk/api_tickets')->bulkUpdatePriority($ids, $priority);
+            Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('priority'));
+            Mage::getSingleton('adminhtml/session')->addSuccess(
+                    Mage::helper('zendesk')->__(
+                            '%d ticket(s) were updated.', count($ids)
+                    )
+            );
+        }
+        catch ( Exception $e )
+        {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        $this->_redirect('adminhtml/zendesk/');
+    }
+    
+    public function bulkChangeTypeAction()
+    {
+        $ids = $this->getRequest()->getParam('id');
+        $type = $this->getRequest()->getParam('type');
+        
+        try
+        {
+            Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('type'));
             Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('zendesk')->__(
                             '%d ticket(s) were updated.', count($ids)

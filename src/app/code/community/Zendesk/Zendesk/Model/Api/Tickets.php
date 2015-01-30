@@ -164,22 +164,11 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
         }
     }
     
-    public function bulkUpdateStatus($data, $status)
-    {
-        if ( is_array($data) )
-        {
-            $ticket['ticket'] = array('status' => $status);
-            $params['ids'] = implode(",",$data);
-            $this->_call('tickets/update_many.json', $params, 'PUT', $ticket);
-        }
-    }
-    
-    public function bulkUpdatePriority($data, $priority)
-    {
-        if ( is_array($data) )
-        {
-            $ticket['ticket'] = array('priority' => $priority);
-            $params['ids'] = implode(",",$data);
+    public function updateMany($ids, $data) {
+        if( is_array($ids) ) {
+            $params['ids'] = implode(",", $ids);
+            $ticket['ticket'] = $data;
+            
             $this->_call('tickets/update_many.json', $params, 'PUT', $ticket);
         }
     }

@@ -389,6 +389,16 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         );
     }
     
+    public function getTypeMap()
+    {
+        return array(
+            'problem'   =>  'Problem',
+            'incident'  =>  'Incident',
+            'question'  =>  'Question',
+            'task'      =>  'Task'
+        );
+    }
+    
     public function getChosenViews() {
         $list = trim(trim(Mage::getStoreConfig('zendesk/backend_features/show_views')), ',');
         return explode(',', $list);
