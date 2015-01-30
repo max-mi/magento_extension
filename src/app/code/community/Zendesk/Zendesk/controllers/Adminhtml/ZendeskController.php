@@ -555,7 +555,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                 $post['password'] = '';
             }
 
-            if( $settings->getPassword() == $post['password'] )
+            if( $settings->getPassword() === $post['password'] )
             {
                 $post['password'] = "";
             }

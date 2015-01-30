@@ -54,7 +54,7 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
             if( $settings->getUseGlobalSettings() === "0")
             {
                 $email = $settings->getUsername();
-                $password = Mage::helper('core')->decrypt( $settings->getPassword() );
+                $password = Mage::helper('core')->decrypt($settings->getPassword());
             }
             else
             {
@@ -67,6 +67,8 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
             $email = Mage::getStoreConfig('zendesk/general/email'). '/token';
             $password = Mage::getStoreConfig('zendesk/general/password');
         }
+        
+        //echo '<pre>'; var_dump($email, $password); exit;
 
         $client->setAuth(
             $email,
