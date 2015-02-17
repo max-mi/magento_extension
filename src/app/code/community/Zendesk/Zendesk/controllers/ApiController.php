@@ -393,6 +393,42 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         return $this;
     }
     
+    public function test2Action()
+    {
+                $callbackUrl = "http://maxmi.modulesgarden-demo.com/index.php/api/rest/products";
+        $temporaryCredentialsRequestUrl = "http://maxmi.modulesgarden-demo.com/index.php/oauth/initiate?oauth_callback=" . urlencode($callbackUrl);
+        $adminAuthorizationUrl = 'http://maxmi.modulesgarden-demo.com/index.php/admin/oauth_authorize';
+        $accessTokenRequestUrl = 'http://maxmi.modulesgarden-demo.com/index.php/oauth/token';
+        $apiUrl = 'http://maxmi.modulesgarden-demo.com/index.php/api/rest';
+        $consumerKey = '40a58d0791caa394b1a29b19e90ff337';
+        $consumerSecret = '4d0e18af97b4dc1f14e75502981df910';
+
+
+            $authType = ($_SESSION['state'] == 2) ? OAUTH_AUTH_TYPE_AUTHORIZATION : OAUTH_AUTH_TYPE_URI;
+            $oauthClient = new OAuth($consumerKey, $consumerSecret, OAUTH_SIG_METHOD_HMACSHA1, $authType);
+            $oauthClient->enableDebug();
+
+                $oauthClient->setToken($_SESSION['token'], $_SESSION['secret']);
+                $resourceUrl = "$apiUrl/products";
+                $productData = json_encode(array(
+                    'type_id' => 'simple',
+                    'attribute_set_id' => 4,
+                    'sku' => 'simple' . uniqid(),
+                    'weight' => 1,
+                    'status' => 1,
+                    'visibility' => 4,
+                    'name' => 'Simple Product',
+                    'description' => 'Simple Description',
+                    'short_description' => 'Simple Short Description',
+                    'price' => 99.95,
+                    'tax_class_id' => 0,
+                ));
+                $headers = array('Content-Type' => 'application/json');
+                $oauthClient->fetch($resourceUrl, $productData, OAUTH_HTTP_METHOD_POST, $headers);
+                print_r($oauthClient->getLastResponseInfo());
+            
+    }
+    
     public function testAction()
     {
         $callbackUrl = "http://maxmi.modulesgarden-demo.com/index.php";
