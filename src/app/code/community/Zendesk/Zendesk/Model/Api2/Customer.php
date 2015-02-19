@@ -16,10 +16,7 @@
  * limitations under the License.
  */
 
-class Zendesk_Zendesk_Model_Api extends Mage_Api_Model_Resource_Abstract{
+class Zendesk_Zendesk_Model_Api2_Customer extends Mage_Api2_Model_Resource {
     
-    public function getCustomer($email)
-    {
-        die($email."ololo");
-    }
+
 }

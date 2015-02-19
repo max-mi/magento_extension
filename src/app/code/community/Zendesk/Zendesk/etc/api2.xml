@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2015 Zendesk.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<config>
+    <api2>
+        <resource_groups>
+            <zendesk translate="title" module="Zendesk_Zendesk">
+                <title>Zendesk API</title>
+                <sort_order>10</sort_order>
+            </zendesk>
+        </resource_groups>
+        <resources>
+            <zendesk translate="title" module="Zendesk_Zendesk">
+                <group>zendesk</group>
+                <model>zendesk/api2_customer</model>
+                <title>Zendesk Customer</title>
+                <sort_order>10</sort_order>
+                <privileges>
+                    <admin>
+                        <create>1</create>
+                        <retrieve>1</retrieve>
+                    </admin>
+                </privileges>
+                <attributes>
+                    <coupon_id>Coupon ID</coupon_id>
+                    <code>Code</code>
+                    <qty>Quantity</qty>
+                    <length>Length</length>
+                    <format>Format</format>
+                </attributes>
+                <routes>
+                    <route>
+                        <route>/zendesk/customer/:email</route>
+                        <action_type>collection</action_type>
+                    </route>
+                </routes>
+                <versions>1</versions>
+            </zendesk>
+        </resources>
+    </api2>
+</config>

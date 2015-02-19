@@ -196,7 +196,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             return;
         }
         
- 
+        
         // Check if we have been passed an order ID, in which case we can preload some of the form details
         if($orderId = $this->getRequest()->getParam('order_id')) {
             $order = Mage::getModel('sales/order')->load($orderId);
