@@ -30,11 +30,22 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
     public function addFieldToFilter($fieldName, $condition = null) {
         if(is_string($condition) OR is_array($condition)) {
             
+            $searchFields = array();
+            
             switch($fieldName) {
                 case 'subject':
+                    $searchFields[] = array(
+                        'field' =>  'subject',
+                        'value' =>  '"'.$condition.'"'
+                    );
+                    break;
+                case 'requester':
                 case 'requester_id':
                     $value = is_numeric($condition) ? $condition : '*' . $condition . '*';
-                    $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field("requester", $value) );
+                    $searchFields[] = array(
+                        'field' =>  'requester',
+                        'value' =>  $value
+                    );
                     break;
                 case 'tags':
                 case 'status':
@@ -42,31 +53,51 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
                 case 'status':
                 case 'group':
                 case 'assignee':
-                    $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field($fieldName, $condition) );
+                    $searchFields[] = array(
+                        'field' =>  $fieldName,
+                        'value' =>  $condition
+                    );
                     break;
                 case 'type':
-                    $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field('ticket_type', $condition) );
+                    $searchFields[] = array(
+                        'field' =>  'ticket_type',
+                        'value' =>  $condition
+                    );
                     break;
                 case 'id':
-                    $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field('', $condition, '') );
+                    $searchFields[] = array(
+                        'field'     =>  '',
+                        'value'     =>  $condition,
+                        'operator'  =>  ''
+                    );
                     break;
                 case 'created_at':
                 case 'updated_at':
-                    $fields     = array();
                     $fieldName  = substr($fieldName, 0, -3);
                     
                     if( isset($condition['from']) AND Mage::helper('zendesk')->isValidDate($condition['from']) ) {
                         $value = Mage::helper('zendesk')->getFormatedDataForAPI( $condition['from'] );
-                        $fields[] = new Zendesk_Zendesk_Model_Search_Field($fieldName, $value, '>');
+                        $searchFields[] = array(
+                            'field'     =>  $fieldName,
+                            'value'     =>  $value,
+                            'operator'  =>  '>'
+                        );
                     }
                     
                     if( isset($condition['to']) AND Mage::helper('zendesk')->isValidDate($condition['to']) ) {
                         $value = Mage::helper('zendesk')->getFormatedDataForAPI( $condition['to'] );
-                        $fields[] = new Zendesk_Zendesk_Model_Search_Field($fieldName, $value, '<');
+                        $searchFields[] = array(
+                            'field'     =>  $fieldName,
+                            'value'     =>  $value,
+                            'operator'  =>  '<'
+                        );
                     }
-                    
-                    $this->_search->addFields($fields);
                     break;
+            }
+            foreach ($searchFields as $field) {
+                $operator = isset($field['operator']) ? $field['operator'] : ":";
+                $value = isset($field['value']) ? $field['value'] : "none";
+                $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field($field['field'], $value, $operator));
             }
         }
 
@@ -107,7 +138,7 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
             
             $this->appendParamsWithoutIdPostfix($ticket, array('requester', 'assignee', 'group'));
             
-            $obj    = new Varien_Object();
+            $obj = new Varien_Object();
             $obj->setData($ticket);
             $this->addItem($obj);
         }
@@ -129,7 +160,7 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
         foreach($params as $param) {
             $name = $param . '_id';
             
-            if( isset($item[$name]) ) {
+            if(isset($item[$name])) {
                 $item[$param] = $item[$name];
             }
         }

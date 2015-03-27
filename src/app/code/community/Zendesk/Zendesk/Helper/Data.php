@@ -268,105 +268,18 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getStoreConfig('zendesk/general/use_external_id');
     }
-    
-    /**
-     * Retrieve ticket statistics
-     */
-    public function getTicketTotals($type = null, $from = null, $to = null)
-    {
-        try {
-            $tickets = Mage::getModel('zendesk/api_tickets')->all();
-        }
-        catch(Exception $ex) {
-            return array();
-        }
-        
-        if( is_null($tickets) )
-        {
-            return false;
-        }
-        
-        $totals = array(
-            'open'      =>  0,
-            'new'       =>  0,
-            'solved'    =>  0,
-            'closed'    =>  0,
-            'all'       =>  0,
-            'pending'   =>  0
-        );
 
-        if( $from )
-            $from = strtotime($from);
-        else
-            $from = 0;
-
-        foreach( $tickets as $ticket )
-        {
-            if( $from || $to )
-            {
-                if( strtotime($ticket['created_at']) > $from)
-                {
-                    if( $to )
-                    {
-                        if( strtotime($ticket['created_at']) < strtotime($to) )
-                        {
-                            if( isset($totals[$ticket['status']]) )
-                                $totals[$ticket['status']]++;
-                            
-                            $totals['all']++;
-                        }
-                    }
-                    else
-                    {
-                        if( isset($totals[$ticket['status']]) )
-                            $totals[$ticket['status']]++;
-                        
-                        $totals['all']++;
-                    }
-                }
-            }
-            else
-            {
-                if( isset($totals[$ticket['status']]) )
-                    $totals[$ticket['status']]++;
-                    
-                $totals['all']++;
-            }
-        }
-        
-        
-        if( $type && isset($totals[$type]))
-        {
-            return $totals[$type];
-        }
-        else
-        {
-            return $totals;
-        }
-    }
-    
-    public function getTicketUrl($row)
+    public function getTicketUrl($row, $link = false)
     {   
         $path = Mage::getSingleton('admin/session')->getUser() ? 'adminhtml/zendesk/login' : '*/sso/login';
         $url = Mage::helper('adminhtml')->getUrl($path, array("return_url" => Mage::helper('core')->urlEncode(Mage::helper('zendesk')->getUrl('ticket', $row['id']))));
+        
+        if ($link)
+            return $url;
+        
         $subject = $row['subject'] ? $row['subject'] : $this->__('No Subject');
 
         return '<a href="' . $url . '" target="_blank">' .  $subject. '</a>';
-    }
-        
-    public function getAdminSettings() {
-        $admin = Mage::getSingleton('admin/session')->getUser();
-        if( $admin )
-        {
-            $adminId    = $admin->getUserId();
-            $settings   = Mage::getModel('zendesk/settings')->loadByAdminId($adminId);
-            return $settings;
-        }
-        else
-        {
-            return false;
-        }
-        
     }
     
     public function getStatusMap()
@@ -399,7 +312,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             'question'  =>  'Question',
             'task'      =>  'Task'
         );
-}
+    }
     
     public function getChosenViews() {
         $list = trim(trim(Mage::getStoreConfig('zendesk/backend_features/show_views')), ',');
@@ -412,7 +325,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     }
     
     public function isValidDate($date) {
-        if( is_string($date) ) {
+        if(is_string($date)) {
             $d = DateTime::createFromFormat('d/m/Y', $date);
             return $d && $d->format('d/m/Y') == $date;
         }

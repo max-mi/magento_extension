@@ -19,7 +19,7 @@
 class Zendesk_Zendesk_Model_Api2_Customer_Rest_Admin_V1 extends Zendesk_Zendesk_Model_Api2_Customer { 
     
    /**
-     * Retrieve list of coupon codes.
+     * Retrieve customer.
      *
      * @return array
      */
@@ -69,7 +69,7 @@ class Zendesk_Zendesk_Model_Api2_Customer_Rest_Admin_V1 extends Zendesk_Zendesk_
         } else {
             if(count($orders) == 0) {
                 // The email address doesn't even correspond with a guest customer
-                return json_encode(array('success' => false, 'message' => 'Customer does not exist'));
+                return array('success' => false, 'message' => 'Customer does not exist');
             }
 
             $info = array(
@@ -78,6 +78,6 @@ class Zendesk_Zendesk_Model_Api2_Customer_Rest_Admin_V1 extends Zendesk_Zendesk_
             );
         }
 
-        return json_encode($info);
+        return $info;
     }
 }
