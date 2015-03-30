@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/latest/zaf_sdk.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function (event) {
+                var app = window.ZAFClient.init();
+                app.postMessage('sendTokens', {location: window.location.href});
+            });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

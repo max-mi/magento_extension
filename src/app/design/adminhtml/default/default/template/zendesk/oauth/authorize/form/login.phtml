@@ -1,0 +1,163 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2014 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Admin login form template
+ *
+ * @var $this Mage_Oauth_Block_Adminhtml_Oauth_Authorize
+ * @see Mage_Oauth_Block_Adminhtml_Oauth_Authorize
+ */
+
+ ?>
+<?php if ($this->getRequest()->getParam('app_guid', false)) { ?>
+<div id='api'>
+    <div><?php echo $this->getMessagesBlock()->toHtml() ?></div>
+    <?php if (!$this->getHasException()): ?>
+        <form method="post" action="<?php echo $this->getPostActionUrl() ?>" id="loginForm">
+            <fieldset>
+                <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
+                <h3><?php echo $this->__('Log in to Magento Admin Panel'); ?></h3>
+                <p><?php
+                    echo $this->__('Log in to use <strong>%s</strong>',
+                        $this->getConsumer()->getName())
+                    ?></p>
+                <table>
+                    <tr>
+                        <td><label class='label'  for="username"><?php echo $this->__('User Name:') ?></label></td>
+                        <td><input type="text" id="username" name="login[username]" value="" class="required-entry input-text" /></td>
+                    </tr>
+                    <tr>
+                        <td><label class='label' for="login"><?php echo $this->__('Password:') ?></label></td>
+                        <td><input type="password" id="login" name="login[password]" class="required-entry input-text" value="" /></td>
+                    </tr>
+                </table>
+                <div class="ta-right">
+                    <button class='btn' type="submit" title="<?php echo $this->__('Login') ?>" ><?php echo $this->__('Login') ?></button>
+                    <button class='btn' onclick="document.location.href='<?php echo $this->getRejectUrl() ?>'; return false;" title="<?php echo $this->__('Reject') ?>"><?php echo $this->__('Reject') ?></button>
+                </div>
+                <input type="hidden" name="oauth_token" value="<?php echo $this->escapeHtml($this->getToken()) ?>"/>
+            </fieldset>
+        </form>
+        <script type="text/javascript">
+        //<![CDATA[
+             var loginForm = new varienForm('loginForm');
+        //]]>
+        </script>
+    <?php endif; ?>
+</div>
+<style>
+#api table {
+    width: 100%;
+}
+#api table td:first-child {
+    width: 30%;
+}
+#api table td {
+    padding-right: 6px;
+}
+#api input {
+    background-image: linear-gradient(#fafafa,#ffffff);
+    box-shadow: none;
+    padding: 3px;
+    min-height: 18px;
+    border: 1px solid #D3D3D3;
+    font: 99% "Lucida Grande","Lucida Sans Unicode","Lucida Sans",Verdana,Tahoma,sans-serif;
+    width: 100%;
+}
+.ta-right {
+
+    text-align: right;
+}
+.label {
+    font: 99% "Lucida Grande","Lucida Sans Unicode","Lucida Sans",Verdana,Tahoma,sans-serif;
+    font-size: 11px;
+    color: #999;
+    float: none;
+    margin: 4px 0 6px 0;
+    text-align: left;
+    z-index: 0;
+}
+.btn {
+    border-color: #ccc;
+    border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+    display: inline-block;
+    padding: 5px 10px 5px;
+    margin-bottom: 0;
+    font-size: 12px;
+    line-height: 18px;
+    color: #555;
+    text-align: center;
+    text-shadow: none !important;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: none;
+    white-space: nowrap;
+}
+.btn:hover {
+    box-shadow: inset 1px 0 0 rgba(255,255,255,0.125),inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+    background-color: #ffffff;
+    background-image: none;
+}
+</style>
+<?php } else { ?>
+<div class="login-container">
+    <div class="login-box">
+        <div class="login-form">
+            <?php echo $this->getMessagesBlock()->toHtml() ?>
+            <?php if (!$this->getHasException()): ?>
+                <form method="post" action="<?php echo $this->getPostActionUrl() ?>" id="loginForm">
+                    <fieldset>
+                        <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
+                        <h2><?php echo $this->__('Log in to Admin Panel'); ?></h2>
+                        <p class="description"><?php echo $this->__('Log in to use <strong>%s</strong>', $this->getConsumer()->getName()) ?></p>
+                        <div class="input-box input-left"><label for="username"><?php echo $this->__('User Name:') ?></label><br/>
+                            <input type="text" id="username" name="login[username]" value="" class="required-entry input-text" /></div>
+                        <div class="input-box input-right"><label for="login"><?php echo $this->__('Password:') ?></label><br />
+                            <input type="password" id="login" name="login[password]" class="required-entry input-text" value="" /></div>
+                        <div class="clear"></div>
+                        <div class="form-buttons">
+                            <button type="submit" class="form-button" title="<?php echo $this->__('Login') ?>" ><?php echo $this->__('Login') ?></button>
+                            <button onclick="document.location.href='<?php echo $this->getRejectUrl() ?>'; return false;" title="<?php echo $this->__('Reject') ?>"><?php echo $this->__('Reject') ?></button>
+                        </div>
+                        <input type="hidden" name="oauth_token" value="<?php echo $this->escapeHtml($this->getToken()) ?>"/>
+                    </fieldset>
+                </form>
+                <script type="text/javascript">
+                //<![CDATA[
+                     var loginForm = new varienForm('loginForm');
+                //]]>
+                </script>
+            <?php endif; ?>
+        </div>
+        <p class="legal"><?php echo $this->__('Magento is a trademark of Magento Inc. Copyright &copy; %s Magento Inc.', date('Y')) ?></p>
+        <div class="bottom"></div>
+    </div>
+</div>
+<?php } ?>
