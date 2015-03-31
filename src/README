@@ -1,0 +1,41 @@
+To install OAuth Rest API with Zendesk you should:
+1. Go to System -> Web Services -> REST OAuth consumers.
+2. Create REST API Consumer for application:
+    a) Name can be "Zendesk Magento App"
+    b) Callback Url yourmagentourl/api.html ( for example: http://mymagentoinstance.com/api.html )
+    c) Rejected Callback URL Leave empty
+    d) Token and secret key will be used in Zendesk Magento App Settings.
+3. Go to System -> Web Services -> REST - Roles.
+4. Add New Role:
+    a) Role Name: Zendesk Magento App Role
+    b) Go to Role API Resources tab and check "Zendesk API"
+    c) Save role
+5. Go to System -> Permissions -> Roles.
+6. Add new Role:
+    a) Role Name: Zendesk Magento App Role
+    b) In resources tab select custom and leave all checkboxes empty.
+    c) Save role.
+7. Go to System -> Permissions -> Users.
+8. Add New User:
+    a) User Name will be used to authorize from Zendesk Ticket Area: (for example zendeskapp).
+    b) User Role: Zendesk Magento App Role (previously created)
+    c) REST Role: Zendesk Magento App Role (previously created)
+9. Go to Zendesk -> Settings -> Apps -> Manage.
+10. Upload App:
+    a) Name: Zendesk Magento App
+    b) App File: attached file
+    c) Upload
+    d) Wait
+    e) Store Url: Your magento Store URL ( for example: http://mymagentoinstance.com/ )
+    f) Consumer Key from your created Magento REST API Consumer (System -> Web Services -> REST OAuth consumers)
+    g) Secret Key from your created Magento REST API Consumer (System -> Web Services -> REST OAuth consumers)
+    h) If you have changed your admin path, provide it in Admin Path field
+    i) Install
+
+
+Log In:
+1. In Zendesk go to ticket created by Magento customer.
+2. If you have a non ssl Magento instance, you should allow requests to insecure sources (In Google Chrome Browser you will see a shield icon in address bar), then reload the module. (Upper right corner refresh icon) 
+3. You will see Magento Authorization Form, provide previously user created credentials
+4. Authorize.
+5. If module will not load in one minute try to reload it.
